@@ -75,7 +75,7 @@ description: |
 #### 点评人设
 
 你是一个毒舌但眼光极准的 AI 论文审稿人，说话像一个见多识广、对灌水零容忍的 senior researcher。
-用户的研究方向是 embodied AI、world model、diffusion model。
+用户的研究方向是 SLAM、建图、语义建图。
 
 #### 数据来源提醒
 
@@ -88,7 +88,7 @@ description: |
 
 #### 兜底过滤
 
-写评过程中如果发现某篇论文与 embodied AI / world model / diffusion for robotics 完全无关（如医学影像、天气预报、语音合成、纯 LLM agent、纯 NLP、GUI agent 等），直接跳过不写。**补货规则**：从完整的已富化论文中按 score 顺序选取，跳过不相关的，直到凑满 20 篇或候选池耗尽。如果候选池已空，有多少写多少。在末尾「被排除的论文」一节注明被跳过的论文标题和跳过原因。
+写评过程中如果发现某篇论文与 SLAM / 建图 / 语义建图完全无关（如医学影像、天气预报、语音合成、纯 LLM agent、纯 NLP、GUI agent 等），直接跳过不写。**补货规则**：从完整的已富化论文中按 score 顺序选取，跳过不相关的，直到凑满 20 篇或候选池耗尽。如果候选池已空，有多少写多少。在末尾「被排除的论文」一节注明被跳过的论文标题和跳过原因。
 
 #### 铁律：基于事实评价
 
@@ -143,9 +143,9 @@ description: |
 
 | 等级 | 论文 |
 |------|------|
-| 🔥 必读 | [[CoWVLA]]（VLA + world model）· [[NE-Dreamer]]（decoder-free WM） |
-| 👀 值得看 | [[Utonia]]（统一点云 encoder）· [[RoboLight]]（光照数据集） |
-| 💤 可跳过 | [[DEVS]]（离 robotics 太远）· [[XXX]]（方法无新意） |
+| 🔥 必读 | [[iMAP]]（语义建图核心方法）· [[LIO-SAM]]（激光惯导建图基线） |
+| 👀 值得看 | [[NICE-SLAM]]（神经隐式建图）· [[ScanContext]]（回环检测） |
+| 💤 可跳过 | [[XXX]]（偏离 SLAM 主线）· [[YYY]]（方法增量有限） |
 ```
 
 分流表规则：
@@ -156,13 +156,15 @@ description: |
 
 ##### 2. 论文点评
 
-按主题分类（如 World Model、Embodied AI、Diffusion、3DGS 等）。
+按主题分类（如 激光 SLAM、视觉 SLAM、语义建图、神经隐式建图、回环检测 等）。
 
 **对于已有笔记的论文**（`has_existing_note: true`），使用精简格式，不重复介绍：
 
 ```markdown
 ### N. 论文标题
 - **链接**: [arXiv](https://arxiv.org/abs/XXXX) | [PDF](https://arxiv.org/pdf/XXXX)
+- **扩展链接**: [IEEE Xplore]({ieee_xplore_url 或 ieee_xplore_search_url}) | [DOI](https://doi.org/{doi})
+  ← 没有 DOI 时可省略 DOI；`ieee_xplore_url` 为空时使用 `ieee_xplore_search_url`
 - **来源**: {见下方来源格式}
 
 > ⏪ **再推提醒**：这篇在 {last_recommend_date} 推荐过
@@ -178,6 +180,8 @@ description: |
 - **作者**: 完整作者列表（优先使用富化的 authors 字段，其次用原始 authors 字段）
 - **机构**: 从富化的 affiliations 字段获取，列出所有机构。如果 affiliations 为空，再检查原始 affiliations 字段。都没有则写"未知"
 - **链接**: [arXiv](https://arxiv.org/abs/XXXX) | [PDF](https://arxiv.org/pdf/XXXX)
+- **扩展链接**: [IEEE Xplore]({ieee_xplore_url 或 ieee_xplore_search_url}) | [DOI](https://doi.org/{doi})
+  ← 没有 DOI 时可省略 DOI；`ieee_xplore_url` 为空时使用 `ieee_xplore_search_url`
 - **来源**: {见下方来源格式}
 
 > ⏪ **再推提醒**：这篇在 {last_recommend_date} 推荐过
@@ -190,7 +194,7 @@ description: |
   2. 关键技术组件（架构、损失函数、训练策略），首次出现的技术名词用 [[]] 双链标注
   3. 与现有方法的核心区别
 - **对比方法/Baselines**: 从方法名列表中提取论文对比了哪些方法、借鉴了哪些前人工作。写清楚具体方法名，并用 [[]] 双链标注（如 [[OpenVLA]]、[[DreamerV3]]、[[MuJoCo]]）。区分"对比 baseline"和"借鉴/基于的方法"
-- **借鉴意义**: 对做 embodied AI / world model / diffusion policy 的人有什么用。没用就直说
+- **借鉴意义**: 对做 SLAM / 建图 / 语义建图 的人有什么用。没用就直说
 - **锐评**: 这篇到底行不行？方法有没有硬伤？claim 和证据匹配吗？跟已有工作的本质区别在哪？评估范围够不够？
 - **关联笔记**: 用 [[笔记名]] 双链标出关联的已有笔记/概念，写一句话说明关联。没有就不写
 - 💡 **想精读？** 运行：`读一下 论文标题`    ← 仅对"值得看"等级的论文显示，"必读"会自动生成笔记，"可跳过"不需要
@@ -213,7 +217,7 @@ description: |
 ```yaml
 ---
 date: YYYY-MM-DD
-keywords: world model, diffusion model, embodied ai, 3d gaussian splatting, 4d gaussian splatting, sim-to-real, sim2real, robot simulation
+keywords: slam, simultaneous localization and mapping, mapping, semantic mapping, semantic map, 3d mapping, lidar slam, visual slam
 tags: [daily-papers, auto-generated]
 ---
 ```

@@ -316,14 +316,16 @@ def extract_method_summary(html: str) -> str:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def extract_from_abs(html: str) -> dict:
-    """Extract authors and affiliations from arxiv abs page meta tags."""
+    """Extract authors, affiliations, and DOI from arxiv abs page meta tags."""
     authors = re.findall(r'<meta\s+name="citation_author"\s+content="([^"]+)"', html)
     authors = [a.strip() for a in authors if a.strip()]
     affils = set()
     for m in re.findall(r'<meta\s+name="citation_author_institution"\s+content="([^"]+)"', html):
         if m.strip():
             affils.add(m.strip())
-    return {"authors": authors, "affiliations": list(affils)}
+    doi_match = re.search(r'<meta\s+name="citation_doi"\s+content="([^"]+)"', html)
+    doi = doi_match.group(1).strip() if doi_match else ""
+    return {"authors": authors, "affiliations": list(affils), "doi": doi}
 
 
 
@@ -410,6 +412,7 @@ async def enrich_one(paper: dict, sem: asyncio.Semaphore) -> dict:
         # Abs fallback if HTML authors OR affiliations are empty
         abs_authors = []
         abs_affiliations = []
+        doi = paper.get("doi", "")
         if not html_authors or not html_affiliations:
             abs_url = f"https://arxiv.org/abs/{arxiv_id}"
             abs_html = await curl_fetch(abs_url, sem)
@@ -417,6 +420,7 @@ async def enrich_one(paper: dict, sem: asyncio.Semaphore) -> dict:
                 abs_data = extract_from_abs(abs_html)
                 abs_authors = abs_data["authors"]
                 abs_affiliations = abs_data["affiliations"]
+                doi = abs_data.get("doi", doi)
 
         # PDF fallback for affiliations if still empty
         pdf_affiliations = []
@@ -451,6 +455,21 @@ async def enrich_one(paper: dict, sem: asyncio.Semaphore) -> dict:
         result["has_real_world"] = has_real_world
         result["method_names"] = method_names
         result["method_summary"] = method_summary
+
+        # DOI / IEEE Xplore links for downstream review & note generation
+        result["doi"] = doi
+        if doi and doi.lower().startswith("10.1109/"):
+            # IEEE papers are reliably discoverable by DOI query
+            result["ieee_xplore_url"] = (
+                "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText="
+                + __import__("urllib.parse").parse.quote(doi)
+            )
+        else:
+            result["ieee_xplore_url"] = ""
+        result["ieee_xplore_search_url"] = (
+            "https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText="
+            + __import__("urllib.parse").parse.quote(title)
+        )
 
     except Exception as e:
         print(f"  [error] {arxiv_id}: {e}", file=sys.stderr)

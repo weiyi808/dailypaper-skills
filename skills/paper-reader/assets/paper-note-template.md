@@ -8,6 +8,8 @@ tags: [{tags}]
 zotero_collection: {zotero_path}
 image_source: online  # online（默认）/ mixed / local
 arxiv_html: {arxiv_html_url}  # 如有
+ieee_url: {ieee_url}  # 如有
+doi: {doi}  # 如有
 created: {date}
 ---
 
@@ -20,70 +22,114 @@ created: {date}
 | 机构 | {Affiliations} |
 | 日期 | {Month Year} |
 | 项目主页 | {project_page_url} |
-| 对比基线 | [[{baseline_paper}]] |
-| 链接 | [arXiv]({arxiv_url}) / [Code]({code_url}) |
+| 链接 | [arXiv]({arxiv_url}) / [IEEE]({ieee_url}) / [DOI](https://doi.org/{doi}) / [Code]({code_url}) |
 
 ---
 
-## 一句话总结
+## 论文解析树
 
-> {用一句话概括这篇论文的核心贡献，不超过50字}
+> 以下五级结构与「论文解析例」脑图一致：**摘要 → 引言 → 方法 → 实验 → 局限**。  
+> Contribution 每项必须 **两句**：一句介绍、一句收益/优势。  
+> 引言中的每个 challenge 必须写清：**Previous method / Limitation / Technical reason**。  
+> **图表**：在对应小节内嵌入 **关键图/表**（`![](url)` 或 `![[本地.png]]`）；**全部** 图/表仍须在文末 `## 关键图表` 按编号列全。
 
----
+### 1. 摘要 Abstract
 
-## 核心贡献
+- **Task（任务）**:
+- **Previous methods 的技术难点**:
+- **Key insight / Motivation（一句话）**:
+  - Insight 一句话:
+  - 收益一句话（可选，若后文已写可写「见贡献 1」）:
+- **Technical contributions**
+  - **Contribution 1**: （一句介绍） / （一句收益）
+  - **Contribution 2**: （一句介绍） / （一句收益）
+  - **Contribution 3**: （一句介绍） / （一句收益）（按需增减）
+- **Experiment（摘要中的实验结论）**:
 
-1. **{贡献1标题}**: {简要说明}
-2. **{贡献2标题}**: {简要说明}
-3. **{贡献3标题}**: {简要说明}
+<!-- 可选：Teaser / 任务示意图（常见 Fig.1），无则删本节 -->
+**图示**:
 
----
+![Figure 1: {一句话}]({arxiv_or_project_image_url})
 
-## 问题背景
+### 2. 引言 Introduction
 
-### 要解决的问题
-{这篇论文要解决什么问题？}
+- **Task and application**:
+- **Previous methods 的技术难点（展开）**
+  - **Challenge 1**
+    - Previous method:
+    - Limitation / Failure cases:
+    - Technical reason（失败的技术原因）:
+  - **Challenge 2**
+    - Previous method:
+    - Limitation / Failure cases:
+    - Technical reason:
+  - **Challenge 3**（按需增减）:
+    - Previous method:
+    - Limitation / Failure cases:
+    - Technical reason:
+- **Our pipeline（解决路径）**
+  - 一句话总述关键创新/insight:
+  - **Contribution 1**: 解决什么问题 / 如何实现 / 优势或 insight
+  - **Contribution 2**: 解决什么问题 / 如何实现 / 优势或 insight
+  - **Contribution 3**（按需增减）:
+- **Cool demos / applications**:
 
-### 现有方法的局限
-{之前的方法有什么不足？}
+### 3. 方法 Method
 
-### 本文的动机
-{为什么作者认为他们的方法能解决这个问题？}
+- **Overview**
+  - **Specific task**: Input: … / Output: …
+  - **Method steps**: Step 1: … / Step 2: … / Step 3: …
 
----
+**Pipeline / 系统主图**（常见 Fig.2，与上列 Step 对应）:
 
-## 方法详解
+![Figure 2: {pipeline 标题}]({arxiv_or_project_image_url})
 
-### 模型架构
+> 读图说明：图中 A/B/C… 模块分别对应上文 Step …。
 
-<!-- 使用 [[概念]] 内联链接所有技术术语 -->
+- **Pipeline modules**
+  - **Module 1: {名称}**
+    - Motivation:
+    - Implementation:
+    - Mechanism（为何有效）:
+    - Technical advantage:
+  - **Module 2: {名称}**
+    - Motivation:
+    - Implementation:
+    - Mechanism:
+    - Technical advantage:
 
-{方法名} 采用 **{架构类型}** 架构：
-- **输入**: 语言指令 $l$ + 观测 $o_t$ + 状态 $s_t$
-- **Backbone**: {使用的主干网络}
-- **核心模块**: [[{核心技术1}]] 用于 [[{核心技术2}]]
-- **输出**: [[Action Chunking|动作块]] $a_{t:t+k}$
-- **总参数**: {参数量}
+<!-- 若某子模块有独立结构图，紧接在该 Module 下插入：![Figure N: …](url) -->
 
-### 核心模块
+<!-- 正文中首次出现的技术名词用 [[概念]] 内联链接 -->
 
-#### 模块1: {名称}
+### 4. 实验 Experiments
 
-**设计动机**: 利用 [[{相关概念}]] 实现 {目标}
+- **Comparison experiments**
+  - 结论要点（与 SOTA / 主表一致）:
+  - **主结果图或表**（嵌入一张最具代表性的；其余见文末「关键图表」全量）:
 
-**具体实现**:
-- 使用 [[{技术A}]] 进行 {处理1}
-- 通过 [[{技术B}]] 实现 {处理2}
+![Figure {N}: main results]({url})
 
-#### 模块2: {名称}
+| Method | … |  … |
+|--------|---|-----|
+| … | … | … |
 
-{同上格式，注意内联概念链接}
+- **Ablation studies**
+  - 各贡献/模块去掉后的影响:
+  - **关键消融图/表**（可选嵌入）:
+
+![Figure {N}: ablation]({url})
+
+### 5. 局限性 Limitation
+
+- {局限 1} — **为何存在**:
+- {局限 2} — **为何存在**:
 
 ---
 
 ## 关键公式
 
-<!-- 公式标题使用 [[概念|名称]] 格式链接到概念库 -->
+<!-- 论文中所有重要公式必须出现在此；每项含 [[概念|名称]]、$$…$$、含义、符号说明 -->
 
 ### 公式1: [[{概念名}|{公式用途}]]
 
@@ -91,157 +137,76 @@ $$
 {公式内容}
 $$
 
-**含义**: {一句话解释公式的作用}
+**含义**:
 
 **符号说明**:
-- $\tau \sim \mathcal{U}(0, 1)$: {含义}
-- ${符号2}$: {含义}
 
-### 公式2: [[{概念名}]] 损失
-
-$$
-\mathcal{L}_{total} = \lambda_1 \mathcal{L}_{task} + \lambda_2 \mathcal{L}_{reg}
-$$
-
-**含义**: {损失函数的整体作用}
-
-**符号说明**:
-- $\lambda_1, \lambda_2$: 权重系数
-- $\mathcal{L}_{task}$: {任务损失作用}
-- $\mathcal{L}_{reg}$: {正则项作用}
-
-### 公式3: 采样/推理过程
-
-$$
-{推理公式}
-$$
-
-**含义**: {推理过程说明}
-
-{... 列出论文中所有重要公式 ...}
+{… 列出论文中所有重要公式 …}
 
 ---
 
 ## 关键图表
 
-<!-- 图片：下载到本地 assets/ 文件夹，用 ![[]] wikilink 嵌入 -->
-<!-- 命名规范: {方法名}_fig{N}_{英文描述}.png -->
-<!-- 下载后必须验证：文件 >10KB、Read 确认内容正确 -->
+<!-- 全量清单：论文中每一个 Figure、Table 必须在此按编号列出（零遗漏）。解析树内已嵌入的图可重复出现或写「同 Figure N 见上文」。 -->
 
-### Figure 1: Overview / 系统概览
+### Figure 1: …
 
-![[{MethodName}_fig1_overview.png]]
+![[{MethodName}_fig1_….png]]
 
-**说明**: {方法名} 的整体架构。输入 {输入内容}，通过 [[{核心技术}]] 处理，输出 {输出内容}。
+**说明**:
 
-### Figure 2: Model Architecture / 模型架构
+### Table 1: …
 
-![[{MethodName}_fig2_architecture.png]]
+| … |
+|---|
 
-**说明**: 展示 [[{模块名}]] 的详细结构。{核心设计点}。
+**说明**:
 
-### Figure 3: Experiment Results / 实验结果
-
-![[{MethodName}_fig3_results.png]]
-
-**说明**: {实验的关键发现}，{方法名} 在 {指标} 上超越 baseline {百分比}。
-
-### Table 1: {表格标题}
-
-| Method | Metric1 | Metric2 | Metric3 |
-|--------|---------|---------|---------|
-| Baseline1 | x.xx | x.xx | x.xx |
-| Baseline2 | x.xx | x.xx | x.xx |
-| **Ours** | **x.xx** | **x.xx** | **x.xx** |
-
-**说明**: {表格的关键发现}
-
-### Table 2: 消融实验
-
-| 配置 | Metric | 说明 |
-|------|--------|------|
-| w/o Module A | x.xx | {影响分析} |
-| w/o Module B | x.xx | {影响分析} |
-| Full Model | x.xx | - |
-
-**关键发现**: {消融实验最重要的结论}
-
-{... 列出论文中所有重要图表 ...}
+{… 列出论文中所有 Figure/Table …}
 
 ---
 
-## 实验
+## 实验结果
 
-### 数据集
+<!-- 与「论文解析树 → 4. 实验」呼应：侧重数字、主表、主图结论；可引用上节图表 -->
 
-| 数据集 | 规模 | 特点 | 用途 |
-|--------|------|------|------|
-| {Dataset1} | {size} | {特点} | 训练/测试 |
-| {Dataset2} | {size} | {特点} | 测试 |
+### 对比实验（要点）
 
-### 实现细节
-
-- **Backbone**: {使用的骨干网络}
-- **优化器**: {Adam/SGD, 学习率}
-- **Batch Size**: {大小}
-- **训练轮数**: {epochs}
-- **硬件**: {GPU 型号和数量}
-
-### 可视化结果
-
-{定性结果的关键观察}
+### 消融实验（要点）
 
 ---
 
-## 批判性思考
+## 文献树定位
 
-### 优点
-1. {优点1}
-2. {优点2}
-3. {优点3}
+- 在 literature tree 中的位置（技术路线 / 创新等级 S-A-B-C）:
+- 是否影响 Milestone Tasks:
 
-### 局限性
-1. {局限1}
-2. {局限2}
+## 挑战-洞察映射
 
-### 潜在改进方向
-1. {改进方向1}
-2. {改进方向2}
-
-### 可复现性评估
-- [ ] 代码开源
-- [ ] 预训练模型
-- [ ] 训练细节完整
-- [ ] 数据集可获取
+- **Challenge** → **Insight** → 与本论文的关联:
 
 ---
 
 ## 关联笔记
 
 ### 基于
-- [[{前置工作1}]]: {说明}
-- [[{前置工作2}]]: {说明}
+- [[{前置工作}]]:
 
 ### 对比
-- [[{对比方法1}]]: {为什么对比}
-- [[{对比方法2}]]: {为什么对比}
+- [[{对比方法}]]:
 
 ### 方法相关
-- [[{核心技术1}]]: 核心方法
-- [[{核心技术2}]]: 重要组件
-
-### 硬件/数据相关
-- [[{硬件或数据集}]]: {说明}
+- [[{核心技术}]]:
 
 ---
 
 ## 速查卡片
 
-> [!summary] {Paper Title}
-> - **核心**: {一句话核心}
-> - **方法**: {关键方法}
-> - **结果**: {主要结果}
-> - **代码**: {GitHub链接}
+> [!summary] {Title}
+> - **Task**:
+> - **Key insight**:
+> - **Main contribution**:
+> - **Limitation**:
 
 ---
 

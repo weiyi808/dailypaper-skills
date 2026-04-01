@@ -78,7 +78,14 @@ ObsidianVault/
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -r ./skills/* ~/.claude/skills/
+
+# 推荐：软链接（后续直接在本仓库改，~/.claude/skills 自动同步）
+if [ -L ~/.claude/skills ]; then rm ~/.claude/skills; fi
+if [ -d ~/.claude/skills ] && [ ! -L ~/.claude/skills ]; then mv ~/.claude/skills ~/.claude/skills.bak.$(date +%F-%H%M%S); fi
+ln -s "$(pwd)/skills" ~/.claude/skills
+
+# 备选：复制安装（适合不想用软链接）
+# cp -r ./skills/* ~/.claude/skills/
 
 # 改成你自己的 Obsidian 库路径，要跟配置文件里的 paths.obsidian_vault 一致
 VAULT=~/ObsidianVault
