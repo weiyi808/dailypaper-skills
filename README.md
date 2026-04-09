@@ -1,6 +1,6 @@
 # dailypaper-skills
 
-我平时读论文用的一套 Claude Code skills。跟 Claude 说句话就能筛论文、读论文、写笔记，最后自动存进 Obsidian。
+面向 **SLAM / 建图 / 机器人感知** 方向的一套 Claude Code skills：跟助手说一句话就能筛论文、读论文、写笔记，最后自动落进 Obsidian。流水线里维护的「领域总览 + 文献树 + 挑战洞察」默认写入 **`SLAM研究知识库.md`**（以及 `SLAM-文献树.md`、`SLAM-挑战洞察树.md`）。
 
 > **新分支更新**
 > Codex / Humanoid 的分支：[`codex+humanoid`](https://github.com/huangkiki/dailypaper-skills/tree/codex%2Bhumanoid)。
@@ -48,11 +48,16 @@ ObsidianVault/
 快速看一下这篇论文 https://arxiv.org/abs/2509.24527
 批判性分析这篇论文 ~/Downloads/paper.pdf
 
+读文件夹论文 ~/Downloads/papers
+批量读文件夹 /data/my-papers
+读取目录里的论文 ./papers
+
 读一下 Zotero 里的 Diffusion Policy
 批量读一下 Zotero 里 VLA 分类下的论文
 ```
 
 `今日论文推荐` 会跑完整流程，`读一下这篇论文 ...` 用来读单篇。
+如果你有一整个本地论文目录，直接用 `读文件夹论文 <目录路径>` 一次性批量处理。
 
 目录页一般会自动更新；如果你手动改过结构，或者怀疑没同步，再补一句：
 
@@ -93,6 +98,17 @@ mkdir -p "$VAULT/DailyPapers" \
   "$VAULT/论文笔记/_概念/0-待分类" \
   "$VAULT/论文笔记/_待整理"
 ```
+
+### 发布 / 换机 / 改过软链接之后要检查什么
+
+如果你从 Git 拉了新版本、换了仓库目录、或曾经删掉/重建过 `~/.claude/skills` 的符号链接，建议按下面过一遍，避免「脚本还在、路径却断了」：
+
+| 检查项 | 说明 |
+| --- | --- |
+| **skills 软链接** | 重新执行安装里的 `ln -s "$(pwd)/skills" ~/.claude/skills`，保证指向**当前**克隆目录下的 `skills/`。 |
+| **`user-config.json`** | 确认 `~/.claude/skills/_shared/user-config.json`（软链时与仓库内 `skills/_shared/user-config.json` 同源）里 `paths.obsidian_vault`、`paper_notes_folder` 等与真实 Obsidian 库一致。 |
+| **Obsidian 总览页文件名** | 流水线默认更新 **`论文笔记/SLAM研究知识库.md`**。若你本地仍使用旧名 **`退化场景SLAM研究知识库.md`**，请在库内重命名，并把各处 `[[退化场景SLAM研究知识库]]` 批量改为 `[[SLAM研究知识库]]`。 |
+| **其他 IDE 的 skills** | 若你还在 Cursor / Codex 等业务里挂了本仓库的 skill，路径变更后需按各产品文档重新指向同一 `skills` 目录。 |
 
 ## ⚙️ 配置
 
@@ -141,6 +157,7 @@ mkdir -p "$VAULT/DailyPapers" \
 
 - `daily-papers`：每日推荐全流程
 - `paper-reader`：读单篇论文
+- `folder-papers-reader`：读文件夹内全部论文（批量）
 - `generate-mocs`：手动补刷目录页
 
 另外还有 3 个内部 skill，主要给调试和重跑单步用：

@@ -87,7 +87,7 @@ python3 ../daily-papers/fetch_and_score.py --days N > /tmp/daily_papers_top30.js
 **先把 Phase 2 的 Top 30 结果保存到临时文件**，然后运行：
 
 ```bash
-cat /tmp/daily_papers_top30.json | python3 ../daily-papers/enrich_papers.py /tmp/daily_papers_enriched.json
+python3 ../daily-papers/enrich_papers.py /tmp/daily_papers_top30.json /tmp/daily_papers_enriched.json
 ```
 
 注意：使用**文件路径参数**（而非 stdout 重定向），避免 sandbox 环境下 stdout/stderr 混淆。
